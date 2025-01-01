@@ -208,7 +208,7 @@ function mainLoop() {
         video.play();
         let currentVideoSecond = video.currentTime
         let actualVideoSecond = (currentTime - (targetPlayTime - videoDropTime)) / 1000
-        if (Math.abs(currentVideoSecond - actualVideoSecond) > 0.5) {
+        if (Math.abs(currentVideoSecond - actualVideoSecond) > 1) {
             console.info("syncing...")
             video.currentTime = actualVideoSecond;
         }
