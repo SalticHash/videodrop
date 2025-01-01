@@ -92,8 +92,8 @@ let videoDropTime = undefined;
 let targetPlayTime = undefined;
 let videoFile = undefined;
 
-let startTime = Date.now();
-let currentTime = new Date(2024, 11, 31, 23, 59, 50).getTime() + (Date.now() - startTime);
+// let startTime = Date.now();
+let currentTime = undefined;//new Date(2024, 11, 31, 23, 59, 50).getTime() + (Date.now() - startTime);
 let cancelLoop = false;
 
 targetPlayTime__Input.addEventListener('input', valueInput);
@@ -182,13 +182,14 @@ stopButton.addEventListener('click', () => {
     document.body.style.backgroundColor = 'white';
     cancelLoop = true;
 });
+
 function mainLoop() {
     if (cancelLoop) {
         cancelLoop = false;
         return;
     }
 
-    currentTime = new Date(2024, 11, 30, 23, 59, 40).getTime() + (Date.now() - startTime);
+    currentTime = Date.now();//new Date(2024, 11, 30, 23, 59, 40).getTime() + (Date.now() - startTime);
     let timeText = new Date(currentTime).toLocaleTimeString();
     let timeDropText = targetPlayTime - currentTime
     let timeStartText = (targetPlayTime - videoDropTime) - currentTime;
@@ -211,6 +212,8 @@ function mainLoop() {
             console.info("syncing...")
             video.currentTime = actualVideoSecond;
         }
+    } else {
+        video.currentTime = 0;
     }
     requestAnimationFrame(mainLoop);
 }
