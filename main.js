@@ -12,6 +12,13 @@ const best_played_by = document.getElementById('play_by');
 
 const dropTimeToCurrentButton = document.getElementById('drop_time_current')
 const startButton = document.getElementById('start_button')
+const stopButton = document.getElementById('stop_button')
+const adjustLeft = document.getElementById('adjust_left')
+const adjustRight = document.getElementById('adjust_right')
+const interval__Input = document.getElementById('adjust_interval')
+
+adjustLeft.addEventListener('click', () => video.currentTime -= parseFloat(interval__Input.value))
+adjustRight.addEventListener('click', () => video.currentTime += parseFloat(interval__Input.value))
 
 function calculateTargetPlayTime() {
     let time = targetPlayTime__Input.value;
@@ -128,7 +135,7 @@ function valueInput() {
     let newVideoFile = videoFile__Input.files[0];
 
     let timeSyncText = new Date(targetPlayTime - videoDropTime).toLocaleTimeString();
-    best_played_by.textContent = `Please start before ${timeSyncText}, so the drop syncs with the video`;
+    best_played_by.textContent = `Please start before ${timeSyncText}, so the drop syncs smoothly with the video`;
     
     if (!newVideoFile || !newVideoFile.type.match(/video/)) {
         hide(video);
@@ -138,7 +145,7 @@ function valueInput() {
     
     if (videoFile == newVideoFile) return;
 
-    videoFile = newVideoFile
+    videoFile = newVideoFile;
 
     var reader = new FileReader();
     reader.readAsDataURL(videoFile);
@@ -149,13 +156,7 @@ function valueInput() {
     }
 }
 
-startButton.addEventListener('click', () => {
-    document.body.style.backgroundColor = 'white';
 
-    startTime = Date.now();
-    cancelLoop = false;
-    mainLoop();
-});
 
 function displayTimeLeft(miliseconds) {
     if (miliseconds < 0) return 'Started!';
@@ -170,6 +171,17 @@ function displayTimeLeft(miliseconds) {
     return `${minutes}:${seconds}.${miliseconds}`;
 }
 
+startButton.addEventListener('click', () => {
+    document.body.style.backgroundColor = 'white';
+
+    startTime = Date.now();
+    cancelLoop = false;
+    mainLoop();
+});
+stopButton.addEventListener('click', () => {
+    document.body.style.backgroundColor = 'white';
+    cancelLoop = true;
+});
 function mainLoop() {
     if (cancelLoop) {
         cancelLoop = false;
@@ -183,8 +195,8 @@ function mainLoop() {
 
     messageParagraph.innerHTML = `
         Current Time: ${timeText}<br>
-        Time for video to start: ${displayTimeLeft(timeStartText)}<br>
         Time for drop to start: ${displayTimeLeft(timeDropText)}<br>
+        Time for video to start: ${displayTimeLeft(timeStartText)}<br>
     `
 
     if (currentTime >= targetPlayTime) {

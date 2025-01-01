@@ -34,6 +34,13 @@
 #video_drop_time > input:focus {background-color: #0078d7; color: white}
 #video_drop_time > input::selection {background-color: transparent}
 
+label[for="adjust_interval"] {
+    display: inline;
+}
+#adjust_interval {
+    display: inline;
+    width: 75px;
+}
 
 input {
     display: block;
