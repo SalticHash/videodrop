@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videodrop</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <p id="message"></p>
+    <p id="play_by"></p>
+    <p>Use <a href="https://cobalt.tools">cobalt.tools</a> to download your desired video.</p>
+    <label for="video_drop_time">Video drop time (MM:SS:MS)</label>
+    <div id="video_drop_time">
+        <input type="text" class="minutes" placeholder="MM" value="0000">:
+        <input type="text" class="seconds" placeholder="SS" value="05">.
+        <input type="text" class="miliseconds" placeholder="MS" value="000">
+    </div>
+
+    <label for="target_play_time">Target play time (HH:MM)</label>
+    <input type="time" id="target_play_time" value="00:00">
+
+    <label for="video_file">Video file</label>
+    <input type="file" id="video_file" accept="video/mp4,video/x-m4v,video/*">
+
+    
+    <video id="video" controls></video>
+    
+    <button id="drop_time_current">Set video drop time to current time</button>
+    <button id="start_button">Start</button>
+    <div id="warning_container"></div>
+</body>
+</html>

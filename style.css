@@ -1,0 +1,53 @@
+#video_drop_time {
+    background-color: white;
+    outline: 1px solid #858585;
+    border-radius: 0.1rem;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 0.1rem;
+    user-select: none;
+}
+
+#video_drop_time:has(input:focus) {
+    outline: 2px solid #0060df;
+    box-shadow: 0 0 0 3px white, 0 0 0 5px #b2c7e9;
+}
+#video_drop_time > input {
+    caret-color: transparent;
+    user-select: none;
+    cursor: default;
+    padding: 0;
+    outline: none;
+    border: none;
+    width: 2ch;
+    margin-inline: 2px;
+    padding-inline: 2px;
+    background-color: transparent;
+    text-align: center;
+    font-family: monospace;
+}
+#video_drop_time > input.miliseconds {width: 3ch}
+#video_drop_time > input.minutes {width: 4ch}
+
+#video_drop_time > input:focus {background-color: #0078d7; color: white}
+#video_drop_time > input::selection {background-color: transparent}
+
+
+input {
+    display: block;
+}
+
+video {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    display: block;
+}
+
+.hidden {display: none}
+
+.fade-1000 {transition: opacity 1000ms; opacity: 0}
+.fade-500 {transition: opacity 500ms; opacity: 0}
+.fade-250 {transition: opacity 250ms; opacity: 0}
