@@ -22,14 +22,14 @@ adjustRight.addEventListener('click', () => video.currentTime += parseFloat(inte
 
 function calculateTargetPlayTime() {
     let time = targetPlayTime__Input.value;
-    if (!time.match(/\d\d:\d\d/g)) return;
+    // if (!time.match(/\d\d:\d\d/g)) return;
 
-    let [minutes, seconds] = time.split(':');
-    minutes = parseInt(minutes);
-    seconds = parseInt(seconds);
+    // let [minutes, seconds] = time.split(':');
+    // minutes = parseInt(minutes);
+    // seconds = parseInt(seconds);
 
-    let playTimeDate = new Date();
-    playTimeDate.setHours(minutes, seconds, 0, 0);
+    let playTimeDate = new Date(time);
+    // playTimeDate.setHours(minutes, seconds, 0, 0);
 
     return playTimeDate.getTime();
 }
