@@ -10,6 +10,7 @@ const warningContainer = document.getElementById('warning_container');
 const video = document.getElementById('video');
 const best_played_by = document.getElementById('play_by');
 
+const video_controls = document.getElementById('video_controls')
 const dropTimeToCurrentButton = document.getElementById('drop_time_current')
 const startButton = document.getElementById('start_button')
 const stopButton = document.getElementById('stop_button')
@@ -127,6 +128,10 @@ function warn(warningText, fadeDelay = 2500, fadeDuration = 1000) {
     setTimeout(() => warning.remove(), fadeDelay + fadeDuration);
 }
 
+function isValidDate(d) {
+    return d instanceof Date && !isNaN(d);
+  }
+
 function valueInput() {
     cancelLoop = true;
 
@@ -134,11 +139,18 @@ function valueInput() {
     targetPlayTime = calculateTargetPlayTime();
     let newVideoFile = videoFile__Input.files[0];
 
-    let timeSyncText = new Date(targetPlayTime - videoDropTime).toLocaleTimeString();
-    best_played_by.textContent = `Please start before ${timeSyncText}, so the drop syncs smoothly with the video`;
+    let timeSyncDate = new Date(targetPlayTime - videoDropTime);
+    let timeSyncText = timeSyncDate.toLocaleTimeString();
+    if (!isValidDate(timeSyncDate)) {
+        hide(best_played_by)
+    } else {
+        show(best_played_by)
+        best_played_by.textContent = `Please start before ${timeSyncText}, so the drop syncs smoothly with the video`;
+    }
     
     if (!newVideoFile || !newVideoFile.type.match(/video/)) {
         hide(video);
+        hide(video_controls);
         warn('Please select a video file');
         return;
     }
@@ -153,6 +165,7 @@ function valueInput() {
         let videoContent = event.target.result;
         video.src = videoContent;
         show(video);
+        show(video_controls);
     }
 }
 
@@ -183,6 +196,19 @@ stopButton.addEventListener('click', () => {
     cancelLoop = true;
 });
 
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+}
+
+function clamped_remap(value, start1, stop1, start2, stop2, min = undefined, max = undefined) {
+    let remappedValue = remap(value, start1, stop1, start2, stop2);
+    return clamp(remappedValue, min ?? start2, max ?? stop2);
+}
+
+function remap(value, start1, stop1, start2, stop2) {
+    return ((value - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
+}
+
 function mainLoop() {
     if (cancelLoop) {
         cancelLoop = false;
@@ -208,9 +234,22 @@ function mainLoop() {
         video.play();
         let currentVideoSecond = video.currentTime
         let actualVideoSecond = (currentTime - (targetPlayTime - videoDropTime)) / 1000
-        if (Math.abs(currentVideoSecond - actualVideoSecond) > 1) {
-            console.info("syncing...")
+        // Negative is behind and positive if ahead of actual time
+        let timeDiference = currentVideoSecond - actualVideoSecond
+
+        messageParagraph.innerHTML += `Video Latency: ${timeDiference}<br>`
+
+        // Behing actual time
+        if (timeDiference < -0.5) {
+            console.info("syncing by fast forward...")
+            video.playbackRate = clamped_remap(Math.abs(timeDiference), 0.5, 5, 6, 8, 1, 16);
+        }
+        // Ahead actual time
+        else if (timeDiference > 0.5) {
+            console.info("syncing by change time...")
             video.currentTime = actualVideoSecond;
+        } else {
+            video.playbackRate = 1.0
         }
     } else {
         video.currentTime = 0;
